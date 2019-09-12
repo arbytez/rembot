@@ -1,0 +1,3 @@
+/node_modules
+/src/logger/logs
+package-lock.json

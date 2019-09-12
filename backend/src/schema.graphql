@@ -1,0 +1,54 @@
+# import * from './generated/prisma.graphql'
+
+type Query {
+  me: User
+  getUser(tgid: String!): User
+  getReminders(skip: Int, limit: Int): [Reminder]!
+  getReminder(remId: String!): Reminder
+  countReminders: Int!
+  getAllReminders(skip: Int, limit: Int): [Reminder]!
+  countAllReminders: Int!
+}
+
+type Mutation {
+  createUser(data: UserCreateInput!): User!
+  updateState(newState: String!): User
+  scheduleReminder(text: String!, when: String!): Reminder!
+  intervalReminder(text: String!, interval: String!): Reminder!
+  delayedIntervalReminder(
+    text: String!
+    interval: String!
+    from: String!
+  ): Reminder!
+  removeReminder(remId: String!): Boolean!
+  disableReminder(remId: String!): Boolean!
+  enableReminder(remId: String!): Boolean!
+  requestUrl: UrlInfo!
+  login(userId: String!, urlToken: String!): User!
+  logout: Boolean!
+}
+
+type Subscription {
+  reminderCompleted: Reminder!
+}
+
+type User {
+  id: ID!
+  tgid: String!
+  roles: [Role]!
+  state: String!
+}
+
+type Reminder {
+  id: ID!
+  to: String!
+  text: String!
+  nextRunAt: DateTime
+  lastRunAt: DateTime
+  disabled: Boolean
+}
+
+type UrlInfo {
+  url: String!
+  urlExpiry: Float!
+}

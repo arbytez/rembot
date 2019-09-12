@@ -1,0 +1,435 @@
+# source: http://vps345536.ovh.net:4467/prisma-rembot/dev
+# timestamp: Fri Jun 07 2019 10:03:03 GMT+0200 (GMT+02:00)
+
+type AggregateUser {
+  count: Int!
+}
+
+type BatchPayload {
+  """The number of nodes that have been affected by the Batch operation."""
+  count: Long!
+}
+
+scalar DateTime
+
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Mutation {
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  deleteUser(where: UserWhereUniqueInput!): User
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Query {
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  user(where: UserWhereUniqueInput!): User
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+enum Role {
+  ADMIN
+  USER
+  GUEST
+}
+
+type Subscription {
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type User implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  tgid: String!
+  roles: [Role!]!
+  state: String!
+  urlToken: String
+  urlTokenExpiry: Float
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  id: ID
+  tgid: String!
+  state: String
+  urlToken: String
+  urlTokenExpiry: Float
+  roles: UserCreaterolesInput
+}
+
+input UserCreaterolesInput {
+  set: [Role!]
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  tgid_ASC
+  tgid_DESC
+  state_ASC
+  state_DESC
+  urlToken_ASC
+  urlToken_DESC
+  urlTokenExpiry_ASC
+  urlTokenExpiry_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  tgid: String!
+  roles: [Role!]!
+  state: String!
+  urlToken: String
+  urlTokenExpiry: Float
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserSubscriptionWhereInput!]
+
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+}
+
+input UserUpdateInput {
+  tgid: String
+  state: String
+  urlToken: String
+  urlTokenExpiry: Float
+  roles: UserUpdaterolesInput
+}
+
+input UserUpdateManyMutationInput {
+  tgid: String
+  state: String
+  urlToken: String
+  urlTokenExpiry: Float
+  roles: UserUpdaterolesInput
+}
+
+input UserUpdaterolesInput {
+  set: [Role!]
+}
+
+input UserWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  tgid: String
+
+  """All values that are not equal to given value."""
+  tgid_not: String
+
+  """All values that are contained in given list."""
+  tgid_in: [String!]
+
+  """All values that are not contained in given list."""
+  tgid_not_in: [String!]
+
+  """All values less than the given value."""
+  tgid_lt: String
+
+  """All values less than or equal the given value."""
+  tgid_lte: String
+
+  """All values greater than the given value."""
+  tgid_gt: String
+
+  """All values greater than or equal the given value."""
+  tgid_gte: String
+
+  """All values containing the given string."""
+  tgid_contains: String
+
+  """All values not containing the given string."""
+  tgid_not_contains: String
+
+  """All values starting with the given string."""
+  tgid_starts_with: String
+
+  """All values not starting with the given string."""
+  tgid_not_starts_with: String
+
+  """All values ending with the given string."""
+  tgid_ends_with: String
+
+  """All values not ending with the given string."""
+  tgid_not_ends_with: String
+  state: String
+
+  """All values that are not equal to given value."""
+  state_not: String
+
+  """All values that are contained in given list."""
+  state_in: [String!]
+
+  """All values that are not contained in given list."""
+  state_not_in: [String!]
+
+  """All values less than the given value."""
+  state_lt: String
+
+  """All values less than or equal the given value."""
+  state_lte: String
+
+  """All values greater than the given value."""
+  state_gt: String
+
+  """All values greater than or equal the given value."""
+  state_gte: String
+
+  """All values containing the given string."""
+  state_contains: String
+
+  """All values not containing the given string."""
+  state_not_contains: String
+
+  """All values starting with the given string."""
+  state_starts_with: String
+
+  """All values not starting with the given string."""
+  state_not_starts_with: String
+
+  """All values ending with the given string."""
+  state_ends_with: String
+
+  """All values not ending with the given string."""
+  state_not_ends_with: String
+  urlToken: String
+
+  """All values that are not equal to given value."""
+  urlToken_not: String
+
+  """All values that are contained in given list."""
+  urlToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  urlToken_not_in: [String!]
+
+  """All values less than the given value."""
+  urlToken_lt: String
+
+  """All values less than or equal the given value."""
+  urlToken_lte: String
+
+  """All values greater than the given value."""
+  urlToken_gt: String
+
+  """All values greater than or equal the given value."""
+  urlToken_gte: String
+
+  """All values containing the given string."""
+  urlToken_contains: String
+
+  """All values not containing the given string."""
+  urlToken_not_contains: String
+
+  """All values starting with the given string."""
+  urlToken_starts_with: String
+
+  """All values not starting with the given string."""
+  urlToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  urlToken_ends_with: String
+
+  """All values not ending with the given string."""
+  urlToken_not_ends_with: String
+  urlTokenExpiry: Float
+
+  """All values that are not equal to given value."""
+  urlTokenExpiry_not: Float
+
+  """All values that are contained in given list."""
+  urlTokenExpiry_in: [Float!]
+
+  """All values that are not contained in given list."""
+  urlTokenExpiry_not_in: [Float!]
+
+  """All values less than the given value."""
+  urlTokenExpiry_lt: Float
+
+  """All values less than or equal the given value."""
+  urlTokenExpiry_lte: Float
+
+  """All values greater than the given value."""
+  urlTokenExpiry_gt: Float
+
+  """All values greater than or equal the given value."""
+  urlTokenExpiry_gte: Float
+}
+
+input UserWhereUniqueInput {
+  id: ID
+  tgid: String
+}

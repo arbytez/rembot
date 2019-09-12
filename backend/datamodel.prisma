@@ -1,0 +1,16 @@
+enum Role {
+  ADMIN
+  USER
+  GUEST
+}
+
+type User {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  tgid: String! @unique
+  roles: [Role]! @default(value: GUEST)
+  state: String! @default(value: "main")
+  urlToken: String
+  urlTokenExpiry: Float
+}

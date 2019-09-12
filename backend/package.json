@@ -1,0 +1,41 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon -e js,graphql -x node --inspect src/index.js",
+    "pm2": "cross-env NODE_ENV=production pm2 start ./src/index.js -n RemBotBackend",
+    "prisma:deploy": "prisma deploy --env-file .env.prisma",
+    "prisma:token": "prisma token --env-file .env.prisma",
+    "prisma:generate": "prisma generate --env-file .env.prisma"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "nodemon": "^1.19.1",
+    "prisma": "^1.34.0"
+  },
+  "dependencies": {
+    "agenda": "^2.0.2",
+    "apollo-server-express": "^2.6.1",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.4",
+    "cron-parser": "^2.12.0",
+    "date-fns": "^1.30.1",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "graphql": "^14.3.1",
+    "graphql-cli": "^3.0.11",
+    "graphql-import": "^0.7.1",
+    "graphql-subscriptions": "^1.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.2.7",
+    "prisma-binding": "^2.3.11",
+    "signale": "^1.4.0"
+  },
+  "optionalDependencies": {}
+}
